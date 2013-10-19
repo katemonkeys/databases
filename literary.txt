@@ -1,0 +1,16 @@
+HACK REACTOR NOIR
+
+It's another beautiful Friday night at Hack Reactor...We look out the window and see the flocking birds, swooping in the dimming light as the sun sets. Once again, we only observe it to be true. We do not participate -- there are no thumbs here. We see only the bars of our imprisonment, the progress bars of our git clone process, the underbars of our operation timeout.
+
+
+Twilight, a gentle green twilight, the horizon line the same orange as my SmartWater, backlit by Samsung monitors. The sky deepens as the night falls and our databases cry out for attention, for a schema to scaffold their undefined insides. But dear God! Too many connections... and yet so lonely.
+
+Our co-conspirators, co-horters, if you will, hack away at the remnants of their <INSERT INTO curriculum (sprintName) VALUES (sprint). They do not React to the dim of the orange, orange lights. They do not posit the existence of more than our reactor. Tapping noises and anguished voices can be heard from our station. Just a station. How so like the next. Two keyboards, two minds, two dead weights pretending to be mice. 
+ Could have been anyone's really. Its hard to be anonymous in this 
+ I only wish I could connect to Socket{2}.
+
+
+Closure I just want closure. 
+
+
+Longing for an empathetic soul in the lonely night.
