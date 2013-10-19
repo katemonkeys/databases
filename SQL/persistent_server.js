@@ -2,6 +2,7 @@ var http = require("http");
 var mysql = require('mysql');
 var url = require('url');
 var fs = require('fs');
+var Q = require('Q');
 // var requestHandler = require("./request-handler.js");
 // var handler = require(__dirname + '/server/request-handler');
 
@@ -22,6 +23,7 @@ dbConnection.connect();
 //   if (err) throw err;
 //   console.log(data);
 // });
+
 
 var requestListener = function (request, response) {
   console.log("Serving request type " + request.method + " for url " + request.url);
@@ -56,15 +58,41 @@ var requestListener = function (request, response) {
 //
 //  ---------- GET Request Method Handlers ---------------------
 //
+
   //room_ID should be passed in getFromDB however
   // currently chatroom is a string not connected to ID
   // to fix in refactor
 var handleGet = function(request, response, headers, chatroom) {
   response.writeHead(200, headers);
+  // console.log(request.);
   return getFromDB(1, function(data){
-    console.log("GET response from Database: ", data);
+    console.log("GOT response from Database: <>");
     response.end(JSON.stringify( data ));
   });
+};
+
+var intializeClient = function(request, response, newData, headers){
+  //send back to client room id
+  //user id
+  console.log('::::::::: intitalizing client ::::::::::');
+  var referenceIDs = {};
+
+
+
+
+  getUserID(newData.username, function(id){
+    referenceIDs.user_ID = id;
+    getRoomID(newData.chatroom, function(id){
+      referenceIDs.room_ID = id;
+    });
+  });
+
+
+
+
+  response.writeHead(201, headers);   //this is happening twice!
+  response.end(JSON.stringify(referenceIDs));
+
 };
 
 var getFromDB = function(room_ID, cb){
@@ -76,7 +104,6 @@ var getFromDB = function(room_ID, cb){
   });
 };
 
-
 var getRoomID = function(chatroom, cb){
   var queryString = 'SELECT * FROM rooms WHERE name=\''+chatroom+'\';';
   return dbConnection.query(queryString, function(err,data){
@@ -84,6 +111,15 @@ var getRoomID = function(chatroom, cb){
     cb(data[0].id);
   });
 };
+var getUserID = function(username, cb){
+  var queryString = 'SELECT * FROM users WHERE username=\''+username+'\';';
+  return dbConnection.query(queryString, function(err,data){
+    if (err) throw err;
+    console.log(data);
+    cb(data[0].id);
+  });
+};
+
 //this is a test
 //
 //  ---------- POST Request Method Handlers ---------------------
@@ -95,13 +131,28 @@ var handlePost = function(request, response, headers, chatroom, userID) {
   });
   request.on('end', function(){
     var POST = JSON.parse(body);
-    POST.createdAt = new Date();
-    _chatrooms[chatroom].push(POST);
+    console.log("this is what we POST: ", POST);
+
+    if(POST.isFirstConnect){
+      intializeClient(request, response, POST, headers);
+    }else{
+      POST.createdAt = new Date();
+      //need POST to reflect {user_ID, room_ID, content, createdAt}
+      postToDB(POST);
+      response.writeHead(201, headers);
+      response.end();
+    }
+
   });
-  response.writeHead(201, headers);
-  response.end();
 };
 
+var postToDB = function(post){
+  var queryString = 'INSERT INTO messages SET ?';
+  return dbConnection.query(queryString, post, function(err){
+    if (err) throw err;
+    console.log('successfully inserted');
+  });
+};
 
 // ---------- this starts the server after everything is initalized
 var server = http.createServer(requestListener);

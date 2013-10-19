@@ -5,6 +5,7 @@
   "author": "Hack Reactor",
   "license": "Copyright 2013, Hack Reactor. All rights reserved.",
   "dependencies": {
-    "request": "~2.27.0"
+    "request": "~2.27.0",
+    "q": "~0.9.7"
   }
 }
