@@ -2,7 +2,7 @@ var http = require("http");
 var mysql = require('mysql');
 var url = require('url');
 var fs = require('fs');
-var Q = require('Q');
+var q = require('q');
 // var requestHandler = require("./request-handler.js");
 // var handler = require(__dirname + '/server/request-handler');
 
@@ -74,11 +74,8 @@ var handleGet = function(request, response, headers, chatroom) {
 var intializeClient = function(request, response, newData, headers){
   //send back to client room id
   //user id
-  console.log('::::::::: intitalizing client ::::::::::');
+  console.log('::::::: intitalizing client ::::::::');
   var referenceIDs = {};
-
-
-
 
   getUserID(newData.username, function(id){
     referenceIDs.user_ID = id;
@@ -86,9 +83,6 @@ var intializeClient = function(request, response, newData, headers){
       referenceIDs.room_ID = id;
     });
   });
-
-
-
 
   response.writeHead(201, headers);   //this is happening twice!
   response.end(JSON.stringify(referenceIDs));
